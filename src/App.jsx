@@ -29,6 +29,10 @@ import CourseDetails from './component/Course/CourseDetails';
 import KUProgramList from './component/Programs/KUProgramList';
 import PUProgramList from './component/Programs/PUProgramList';
 import PurProgranList from './component/Programs/PurProgranList';
+import VerifyEmail from './component/Verification/VerifyEmail';
+import ForgotPassword from './component/Verification/ForgotPassword';
+import ResetPassword from './component/Verification/ResetPassaword';
+import ProtectedRoute from './component/Verification/ProtectedRoute';
 
 
 
@@ -52,9 +56,19 @@ const AppContent = () => {
     
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/College" element={<College />} />
+
+        {/* for login signup */}
         <Route path="/Login" element={<Login />} />
         <Route path="/Signup" element={<Signup />} />
-        <Route path="/College" element={<College />} />
+        <Route path='/verify-email' element={<VerifyEmail/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path='/reset-password' element={<ResetPassword/>}/>
+
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute/>}>
+          <Route path='/' element={<Home/>}/>
+        </Route>
        
 
 

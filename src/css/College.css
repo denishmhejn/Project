@@ -37,6 +37,7 @@
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
 }
 
 .college-card:hover {
@@ -59,24 +60,26 @@
   font-size: 1.2rem; /* Smaller font size */
   margin-bottom: 8px; /* Reduced margin */
   color: #333;
+  text-decoration: none; /* Ensure no underline */
 }
 
 .college-info p {
   font-size: 0.9rem; /* Smaller font size */
   color: #555;
   margin-bottom: 8px; /* Reduced margin */
+  text-decoration: none; /* Ensure no underline */
 }
 
 .college-info a {
   display: inline-block;
   margin-top: 8px; /* Reduced margin */
   color: #007bff;
-  text-decoration: none;
+  text-decoration: none; /* Remove underline from links */
   font-size: 0.8rem; /* Smaller font size */
 }
 
 .college-info a:hover {
-  text-decoration: underline;
+  text-decoration: none; /* Ensure no underline on hover */
 }
 
 /* Responsive Design */
