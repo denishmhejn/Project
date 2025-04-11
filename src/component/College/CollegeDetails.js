@@ -6,10 +6,10 @@ import AdLayout from "../AdLayout";
 import Footer from "../Footer";
 import acem1 from "../../images/acem1.jpg";
 
-
 const CollegeDetails = () => {
   const { id } = useParams(); // Get the college ID from the URL
   const [college, setCollege] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   // Mock data (replace with API call or data fetching logic)
   const colleges = [
@@ -54,24 +54,25 @@ const CollegeDetails = () => {
       programs: [
         { name: "Master in Business Administration (MBA)", seats: 40 },
         { name: "Bachelor of Business Administration (BBA)", seats: 60 },
-        { name: "Bachelor of Information Management (BIM)", seats: 48 }
+        { name: "Bachelor of Information Management (BIM)", seats: 48 },
       ],
       collegeInfo: "Orchid International College, established with a vision to provide quality education, is affiliated with Purbanchal University. The college offers a range of undergraduate and graduate programs, focusing on business administration and management. It is committed to fostering academic excellence and professional development among its students.",
       features: [
         "Modern facilities and resources",
         "Qualified and experienced faculty",
         "Industry-oriented curriculum",
-        "Strong alumni network"
+        "Strong alumni network",
       ],
-      studentLife: "Orchid International College encourages students to engage in various extracurricular activities, clubs, and social projects. The college provides a supportive environment for students to explore their interests and develop leadership skills through events, workshops, and seminars.",
-      inductionSeminar: "New students are welcomed with an Induction Seminar designed to introduce them to the college's academic environment, facilities, and opportunities for personal and professional growth.",
+      studentLife:
+        "Orchid International College encourages students to engage in various extracurricular activities, clubs, and social projects. The college provides a supportive environment for students to explore their interests and develop leadership skills through events, workshops, and seminars.",
+      inductionSeminar:
+        "New students are welcomed with an Induction Seminar designed to introduce them to the college's academic environment, facilities, and opportunities for personal and professional growth.",
       firstYearSeminar: [
         "Introduction to Business Management",
         "Effective Communication Skills",
-        "Leadership and Team Building"
-      ]
-    }
-    
+        "Leadership and Team Building",
+      ],
+    },
     // Add other colleges here
   ];
 
@@ -101,8 +102,8 @@ const CollegeDetails = () => {
         </div>
 
         <div className="college-content">
-        <h2>College Introduction</h2>
-        <p>{college.collegeInfo}</p>
+          <h2>College Introduction</h2>
+          <p>{college.collegeInfo}</p>
           <h2>Offered Programs</h2>
           <ul>
             {college.programs.map((program, index) => (
@@ -110,8 +111,8 @@ const CollegeDetails = () => {
                 {program.name} - {program.seats} Seats
               </li>
             ))}
-          </ul><br />
-         
+          </ul>
+          <br />
 
           <h2>Salient Features</h2>
           <ul>
@@ -121,7 +122,8 @@ const CollegeDetails = () => {
           </ul>
 
           <h2>Student Life</h2>
-          <p>{college.studentLife}</p><br />
+          <p>{college.studentLife}</p>
+          <br />
 
           <h2>Induction Seminar</h2>
           <p>{college.inductionSeminar}</p>
@@ -132,11 +134,58 @@ const CollegeDetails = () => {
               <li key={index}>{seminar}</li>
             ))}
           </ul>
-          
         </div>
+
+        <button
+      className="apply-button"
+      onClick={() => setShowForm(true)}
+    >
+      Apply
+    </button>
+
+    <div className={`modal-overlay ${showForm ? 'show-form' : ''}`}>
+      <div className="modal-content">
+        <h2>Application Form</h2>
+        <form>
+          <label>
+            Full Name:
+            <input type="text" name="fullName" required />
+          </label>
+          <br />
+          <label>
+            Email:
+            <input type="email" name="email" required />
+          </label>
+          <br />
+          <label>
+            Contact:
+            <input type="number" name="contact" required />
+          </label>
+          <br />
+          <label>
+            Program:
+            <select name="program">
+              {college.programs.map((program, index) => (
+                <option key={index} value={program.name}>
+                  {program.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <br />
+          <button type="submit">Submit</button>
+        </form>
+        <button
+          className="close-button"
+          onClick={() => setShowForm(false)}
+        >
+          Close
+        </button>
       </div>
-      <AdLayout />
-      <Footer/>
+    </div>
+  </div>
+  <AdLayout />
+  <Footer />
     </>
   );
 };

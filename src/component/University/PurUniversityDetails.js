@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const PurUniversityDetails = () => {
     const navigate =useNavigate();
     const handleOnClick=()=>{
-        navigate();
+        navigate('/purProgramList');
     };
     return(
         <>

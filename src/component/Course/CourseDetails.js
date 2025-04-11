@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom"; // Import useParams to get courseId
 import "../../css/Training/CourseDetails.css";
 import course from "../../images/course.png";
@@ -42,6 +42,8 @@ const courses = [
 const CourseDetails = () => {
   const { courseId } = useParams(); // Get courseId from the URL
   const course = courses.find((c) => c.id === parseInt(courseId)); // Find the course by ID
+  const [showEnrollForm, setShowEnrollFrom]=useState(false);
+  const[showEnquiryForm, setShowEnquiryForm]=useState(false);
 
   if (!course) {
     return <div>Course not found!</div>; // Handle case where course is not found
@@ -65,8 +67,8 @@ const CourseDetails = () => {
               <p>Training Mode: Both Physical & Live Online Classes, including Online Live Night Classes</p>
               <p>UI/UX Design Training in Kathmandu, Nepal</p>
               <div className="trainings-buttons">
-                <button className="enroll-btn">Enroll Now</button>
-                <button className="enquiry-btn">Send Enquiry</button>
+                <button className="enroll-btn" onClick={()=>setShowEnrollFrom(true)}>Enroll Now</button>
+                <button className="enquiry-btn" onClick={()=>setShowEnquiryForm(true)}>Send Enquiry</button>
               </div>
             </div>
 
@@ -122,6 +124,63 @@ const CourseDetails = () => {
               <div className="ad-box">Ad Display</div>
             </div>
           </div>
+        </div>
+      </div>
+      {/* Enroll form */}
+      <div className={`modal-overlay ${
+        showEnrollForm ? "show-form":""
+          }`}>
+            <div className="modal-content">
+            <form >
+              <h2>Enroll Form</h2>
+                <label htmlFor="">
+                  Full Name:
+                  <input type="text" name="name" required />
+                </label>
+                <br />
+                <label htmlFor="">
+                  Phone Number:
+                  <input type="number" name="phone" required id="" />
+                </label>
+                <br />
+                <label htmlFor="">
+                  Email:
+                  <input type="email" name="email" required />
+                </label>
+                <button type="submit">Submit</button>
+
+            </form>
+            <button className="close-button" onClick={()=>setShowEnrollFrom(false)}>
+              Close
+            </button>
+            </div>  
+      </div>
+      {/* Enquiry Form */}
+      <div className={`modal-overlay ${
+        showEnquiryForm?"show-form":""
+      }`}>
+        <div className="modal-content">
+          <h2>Send Enquiry</h2>
+          <form >
+            <label htmlFor="">
+              Full Name:
+              <input type="text" name="name" required />
+            </label>
+            <br />
+            <label htmlFor="">
+              Email:
+              <input type="email" name="email"required />
+            </label>
+            <br />
+            <label htmlFor="">
+              Message:
+              <textarea name="message" required></textarea>
+            </label>
+            <button type="submit"> Submit </button>
+          </form>
+          <button className="close-button" onClick={()=>setShowEnquiryForm(false)}>
+            Close
+          </button>
         </div>
       </div>
       <Footer />

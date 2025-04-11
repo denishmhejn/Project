@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const PuUniversityDetails = () => {
     const navigate=useNavigate();
     const handleOnClick=()=>{
-        navigate();
+        navigate('/puProgramList');
     }
     return(
         <>

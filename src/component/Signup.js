@@ -98,7 +98,7 @@ const Signup = () => {
           <input
             placeholder="Email"
             type="text"
-            name="Email"
+            name="email"
             id="Email"
             value={formData.email}
             onChange={handleChange}
@@ -155,7 +155,7 @@ const Signup = () => {
           <input
             placeholder="New password"
             type="password"
-            name="New password"
+            name="password"
             id="password"
             value={formData.password}
             onChange={handleChange}
@@ -173,7 +173,7 @@ const Signup = () => {
           <input
             placeholder="Confirm Password"
             type="password"
-            name="confirm-password"
+            name="confirmPassword"
             id="confirm-password"
             value={formData.confirmPassword}
             onChange={handleChange}
@@ -189,10 +189,11 @@ const Signup = () => {
         <button className="signup-btn" type="submit" disabled={loading}>
           {loading?'Signing Up..':'Sign Up'}
           {/* Signup */}
-          <div className="auth-options">
+          
+        </button>
+        <div className="auth-options">
             <a href="/Login">Already have an account? Login</a>
           </div>
-        </button>
       </form>
     </div>
   );

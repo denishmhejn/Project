@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const KuUniversityDetails = () => {
     const navigate= useNavigate();
     const handleOnClick= ()=>{
-        navigate();
+        navigate('/kuProgramList');
     };
     return(
         <>
