@@ -45,6 +45,17 @@ const CourseDetails = () => {
   const [showEnrollForm, setShowEnrollFrom]=useState(false);
   const[showEnquiryForm, setShowEnquiryForm]=useState(false);
 
+  const isLoggedIn=localStorage.getItem('authToken') || localStorage.getItem('token');
+
+  const handleApplyClick=()=>{
+    if(!isLoggedIn){
+      alert('Please login first to apply');
+      return;
+    }
+    setShowEnrollFrom(true);
+    setShowEnquiryForm(true);
+  }
+
   if (!course) {
     return <div>Course not found!</div>; // Handle case where course is not found
   }
@@ -67,8 +78,8 @@ const CourseDetails = () => {
               <p>Training Mode: Both Physical & Live Online Classes, including Online Live Night Classes</p>
               <p>UI/UX Design Training in Kathmandu, Nepal</p>
               <div className="trainings-buttons">
-                <button className="enroll-btn" onClick={()=>setShowEnrollFrom(true)}>Enroll Now</button>
-                <button className="enquiry-btn" onClick={()=>setShowEnquiryForm(true)}>Send Enquiry</button>
+                <button className="enroll-btn" onClick={handleApplyClick}>Enroll Now</button>
+                <button className="enquiry-btn" onClick={handleApplyClick}>Send Enquiry</button>
               </div>
             </div>
 

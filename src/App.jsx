@@ -33,14 +33,7 @@ import VerifyEmail from './component/Verification/VerifyEmail';
 import ForgotPassword from './component/Verification/ForgotPassword';
 import ResetPassword from './component/Verification/ResetPassaword';
 import ProtectedRoute from './component/Verification/ProtectedRoute';
-
-
-
-
-
-
-
-
+import OAuthCallback from './component/Verification/OAuthCallback';
 
 const AppContent = () => {
   const location = useLocation();
@@ -49,11 +42,8 @@ const AppContent = () => {
   return (
     <>
       <Head />
-      
-      
-
  
-    
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/College" element={<College />} />
@@ -62,6 +52,7 @@ const AppContent = () => {
         <Route path="/Login" element={<Login />} />
         <Route path="/Signup" element={<Signup />} />
         <Route path='/verify-email' element={<VerifyEmail/>}/>
+        <Route path="/oauth-callback" element={<OAuthCallback />} />
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
 
@@ -119,16 +110,7 @@ const AppContent = () => {
 
 
 
-      {/* {showComponent &&
-        <>
-          <Navbar />
-          <Banner />
-          <AdLayout />
-          <ProgramOffered />
-          <Footer />
-        
-        </>
-      } */}
+  
     </>
   )
 }

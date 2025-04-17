@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../Services/apiService';
+import { forgotPassword } from '../Services/apiService';
 import { HiMail, HiArrowLeft } from 'react-icons/hi';
 import "../../css/ForgotPassword.css";
 
@@ -17,7 +17,7 @@ const ForgotPassword = () => {
         setError('');
 
         try {
-            await authService.forgotPassword(email);
+            await forgotPassword(email);
             setSuccess(true);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to send reset instructions. Please try again.');

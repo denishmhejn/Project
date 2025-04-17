@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import AdDisplayRight from '../AdDisplayRight';
 import Footer from '../Footer';
@@ -14,6 +14,20 @@ const KUProgramList=()=>{
         { id: "be-electrical", name: "BE Electrical Electronics (Bachelor of Engineering in Electrical and Electronics Engineering)" },
         { id: "mse-computer", name: "MSE Computer (Master of Science in Computer Engineering)" },
     ];
+      const [currentPage, setCurrentPage] = useState(1);
+      const itemsPerPage = 12;
+      const totalPages = Math.ceil(kuPrograms.length / itemsPerPage);
+      
+    
+      // Get items for the current page
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentItems = kuPrograms.slice(indexOfFirstItem, indexOfLastItem);
+    
+      // Handle page changes
+      const paginate = (pageNumber) => setCurrentPage(pageNumber);
+      const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+      const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 return(
     <>
     <Navbar/>
@@ -33,15 +47,21 @@ return(
                     ))}
                 </ul>
                 <div className="pagination">
-                    <span>Showing 1 to 100 results</span>
-                    <div className="pagination-buttons">
-                        <button>1</button>
-                        <button>2</button>
-                        <button>3</button>
-                        <button>...</button>
-                        <button>100</button>
-                        <button>Next</button>
-                    </div>
+                <button onClick={prevPage} disabled={currentPage === 1}>
+            &laquo; Prev
+          </button>
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => paginate(i + 1)}
+              className={currentPage === i + 1 ? "active" : ""}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button onClick={nextPage} disabled={currentPage === totalPages}>
+            Next &raquo;
+          </button>
                 </div>
             </div>
             <AdDisplayRight/>

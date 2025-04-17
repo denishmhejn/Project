@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../css/CollegeDetails.css";
 import Navbar from "../navBar";
 import AdLayout from "../AdLayout";
@@ -10,6 +10,10 @@ const CollegeDetails = () => {
   const { id } = useParams(); // Get the college ID from the URL
   const [college, setCollege] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const navigate= useNavigate;
+
+  // check if user is logged in ore not
+  const isLoggedIn=localStorage.getItem('authToken') || localStorage.getItem('token');
 
   // Mock data (replace with API call or data fetching logic)
   const colleges = [
@@ -82,6 +86,14 @@ const CollegeDetails = () => {
     setCollege(selectedCollege);
   }, [id]);
 
+  const handleApplyClick=()=>{
+    if(!isLoggedIn){
+      alert('Please Login first to apply');
+      return;
+    }
+    setShowForm(true);
+  };
+
   if (!college) {
     return <div>Loading...</div>;
   }
@@ -138,7 +150,7 @@ const CollegeDetails = () => {
 
         <button
       className="apply-button"
-      onClick={() => setShowForm(true)}
+      onClick={handleApplyClick}
     >
       Apply
     </button>

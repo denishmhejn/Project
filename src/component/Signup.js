@@ -2,21 +2,25 @@ import React, { useState } from "react";
 import { HiMail,HiUser, HiUserAdd, HiLockClosed, HiAcademicCap } from "react-icons/hi";
 import "../css/signup.css"; // Include necessary CSS styles
 import { useNavigate } from "react-router-dom";
-import { authService } from "./Services/apiService";
+import { authService, initiateOAuth2Login, signUpUser } from "./Services/apiService";
 import "../css/validation/Validation.css";
 
 const Signup = () => {
   const [formData, sertFormData]=useState({
-    username:"",
+    name:"",
     email:"",
     gender:"",
     contact:"",
     password:"",
-    confirmPassword:""
+    address: "",
+    dob: "",
+    interested: "",
+    latestQualification: ""
   });
   const [error, setError]=useState("");
   const[loading, setLoading]=useState(false);
   const[verificationSent, setVerificationSent]=useState(false);
+  const[formErrors, setFormError]=useState({});
   const navigate=useNavigate();
 
   const handleChange=(e)=>{
@@ -27,35 +31,59 @@ const Signup = () => {
     }));
   };
 
+  const validateForm=()=>{
+    const errors={};
+    if (!formData.name)errors.name="Full name is required";
+    if (!formData.email)errors.email="email is required";
+    if(!formData.password)errors.password="Password is required";
+    if(!formData.gender)errors.gender="Gender is required";
+    if(!formData.contact)errors.contact="Contact number must be 10 digit";
+    else if(!/^\d{10}$/.test(formData.contact)) errors.contact = "Contact number must be 10 digits"; 
+
+    setFormError(errors);
+    return Object.keys(errors).length===0; //no errors
+;
+  }
+
   const handleSubmit=async(e)=>{
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    //Validatuon password
-    if(formData.password!==formData.confirmPassword){
-      setError("passwords do not match");
+    //Validatuon form
+    if(!validateForm()){
       setLoading(false);
-      return;
+      return; //stops form submission if validation fails
     }
+
     try{
-      const userData={
-        name:formData.username,
-        email:formData.email,
-        gender:formData.gender,
-        contactNumber:formData.contact,
-        password:formData.password
-      };
-      const response=await authService.signUpuser(userData);
-      setVerificationSent(true);
-      //you might want to redirect to verification page or show am message
-      navigate('/verify-email',{state:{email:formData.email}});
+      await signUpUser (formData);
+      alert('Signed up! check your email for verification code');
+      navigate('/verify-email');
+
     }catch(err){
-      setError(err.response?.data?.message ||"signup failes. please try again");
+      if(err.response){
+        if(err.response.status===400){
+          setError('Invalid input data. Please check form and try again');
+        }
+        else if(err.response.status===409){
+        setError('Email already exists. Please use different email');
+      }
+      else{
+        setError('Something went wrong. Please try again later');
+      }
+
+    }else{
+      setError('Network error. Please check your connection and try again');
+    }
     }finally{
       setLoading(false);
     }
+   
   };
+  const handleOAuth2Login=()=>{
+    initiateOAuth2Login(); //initiates google login
+  }
   return (
     <div className="session">
       <div className="left">
@@ -80,9 +108,9 @@ const Signup = () => {
           <input
             placeholder="Full Name"
             type="text"
-            name="username"
-            id="username"
-            value={formData.username}
+            name="name"
+            id="name"
+            value={formData.name}
             onChange={handleChange}
             autoComplete="off"
             required
@@ -168,22 +196,49 @@ const Signup = () => {
           </div>
         </div>
 
-        {/* Confirm Password */}
+        {/* Address */}
         <div className="floating-label">
-          <input
-            placeholder="Confirm Password"
-            type="password"
-            name="confirmPassword"
-            id="confirm-password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            autoComplete="off"
-            required
-          />
-          <label htmlFor="confirm-password">Confirm Password:</label>
-          <div className="icon">
-            <HiLockClosed size={20} />
-          </div>
+          <input type="text"
+           name="address"
+           id="address"
+           placeholder="enter your address"
+           value={formData.address}
+           onChange={handleChange} />
+
+           <label htmlFor="address"> Address</label>
+        </div>
+
+        {/* Date of Birth */}
+        <div className="floating-label">
+          <input type="date"
+           name="dob"
+            id="dob"
+            value={formData.dob}
+            onChange={handleChange} />
+            <label htmlFor="dob"> Date of Birth</label>
+        </div>
+
+        {/* Interested */}
+        <div className="floating-label">
+          <input type="text"
+           name="interested"
+            id="interested"
+            placeholder="What are you interested in?"
+            value={formData.interested}
+            onChange={handleChange} />
+            <label htmlFor="interested">Interested in (optional)</label>
+        </div>
+        
+        
+        <div className="floating-label">
+          <input type="text"
+           name="latestQualification"
+            id="latestQualification"
+            placeholder="Enter your latest qualification"
+            value={formData.latestQualification}
+            onChange={handleChange} />
+
+            <label htmlFor="latestQualification">Latest Qualification(Optional)</label>
         </div>
 
         <button className="signup-btn" type="submit" disabled={loading}>
@@ -191,6 +246,14 @@ const Signup = () => {
           {/* Signup */}
           
         </button>
+
+        {/* Google Login */}
+        <div className="auth-options">
+        <button className="oauth-btn" onClick={handleOAuth2Login}> Sign up with Google</button>
+        </div>
+
+        
+
         <div className="auth-options">
             <a href="/Login">Already have an account? Login</a>
           </div>

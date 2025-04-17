@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { syllabusData } from '../Data/syllabusData'; // Adjust the import path as needed
 import '../../css/Syllabus/SyllabusDetail.css';
-import AdDisplayRight from '../AdDisplayRight';
+
 import AdLayout from '../AdLayout';
 import Navbar from '../navBar';
 import Footer from '../Footer';

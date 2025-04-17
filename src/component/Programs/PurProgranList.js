@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import Navbar from '../navBar';
 import Banner from '../Banner';
@@ -15,6 +15,17 @@ const PurProgranList=()=>{
         { id: "mca", name: "MCA (Master of Computer Application)", syllabus: "https://edusanjal.com/course/master-of-computer-application-purbanchal-university/" },
         { id: "be-electrical", name: "BE Electrical (Bachelor of Engineering in Electrical and Electronics Engineering)", syllabus: "https://pu.edu.np/academics/programs/engineering/be-electrical-and-electronics-engineering/" },
     ];
+    const[currentPage, setCurrentPage]=useState(1);
+    const itemsPerPage=5;
+    const totalPages=Math.ceil(puPrograms.length/itemsPerPage);
+
+    const indexOfLastItem=currentPage * itemsPerPage;
+    const indexOfFirstItem= indexOfLastItem- itemsPerPage;
+    const currentItems=puPrograms.slice(indexOfFirstItem,indexOfLastItem);
+
+    const paginate=(pageNumber)=>setCurrentPage(pageNumber);
+    const nextPage=()=>setCurrentPage((prev)=>Math.min(prev+1,totalPages));
+    const prevPage=()=>setCurrentPage((prev)=>Math.max(prev-1,1));
     return(
         <>
         <Navbar/>
@@ -33,15 +44,21 @@ const PurProgranList=()=>{
                         ))}
                     </ul>
                     <div className="pagination">
-                        <span>Showing 1 to 100 results</span>
-                        <div className="pagination-buttons">
-                            <button>1</button>
-                            <button>2</button>
-                            <button>3</button>
-                            <button>...</button>
-                            <button>100</button>
-                            <button>Next</button>
-                        </div>
+                       <button onClick={prevPage} disabled={currentPage===1}>
+                        &laquo; Prev
+                       </button>
+                       {[...Array(totalPages)].map((_,i)=>(
+                        <button 
+                        key={i+1}
+                        onClick={()=>paginate(i+1)}
+                        className={currentPage===i+1?"active":""}>
+                            {i+1}
+
+                        </button>
+                       ))}
+                       <button onClick={nextPage} disabled={currentPage===totalPages}>
+                        Next &raquo;
+                       </button>
                     </div>
                 </div>
                 <AdDisplayRight/>

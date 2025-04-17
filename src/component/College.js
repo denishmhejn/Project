@@ -59,7 +59,7 @@ export const colleges = [
   // Add other colleges here
 ];
 
-const disciplines = ["All", "Business", "Technology", "Science"];
+const disciplines = ["All", "Business", "Technology", "Engineering"];
 
 const College = () => {
   const [selectedDiscipline, setSelectedDiscipline] = useState("All");
@@ -88,7 +88,6 @@ const College = () => {
             ))}
           </select>
         </div>
-
         <div className="college-grid">
           {filteredColleges.map((college, index) => (
             <Link to={`/college/${college.id}`} key={college.id}>

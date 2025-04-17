@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link
 import '../../css/TUProgramList.css';
 import Head from '../Head';
@@ -17,6 +17,17 @@ const TUProgramList = () => {
     { id: "mca", name: "MCA (Master of Computer Application)" },
     { id: "be-electrical", name: "BE Electrical Electronic (Bachelor of Engineering in Electrical and Electronics Engineering)" },
   ];
+  const [currentPage, setCurrentPage]=useState(1);
+  const itemsPerPage=5;
+  const totalPages=Math.ceil(programs.length/itemsPerPage);
+  
+  const indexOfLastItem=currentPage * itemsPerPage;
+  const indexOfFirstItem= indexOfLastItem- itemsPerPage;
+  const currentItems=programs.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate=(pageNumber)=>setCurrentPage(pageNumber);
+  const nextPage=()=>setCurrentPage((prev)=>Math.min(prev+1,totalPages));
+  const prevPage=()=>setCurrentPage((prev)=>Math.max(prev-1,1));
 
   return (
     <>
@@ -38,15 +49,21 @@ const TUProgramList = () => {
               ))}
             </ul>
             <div className="pagination">
-              <span>Showing 1 to 100 of results</span>
-              <div className="pagination-buttons">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>...</button>
-                <button>100</button>
-                <button>Next</button>
-              </div>
+            <button onClick={prevPage} disabled={currentPage === 1}>
+            &laquo; Prev
+          </button>
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => paginate(i + 1)}
+              className={currentPage === i + 1 ? "active" : ""}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button onClick={nextPage} disabled={currentPage === totalPages}>
+            Next &raquo;
+          </button>
             </div>
           </div>
           <AdDisplayRight /> {/* AdDisplayRight aligned to the right */}
