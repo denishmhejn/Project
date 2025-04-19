@@ -117,7 +117,7 @@
   padding: 10px;
   font-size: 1rem;
   color: #fff;
-  background-color: #28a745;
+  /* background-color: #47bbdf; */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -131,4 +131,47 @@
 /* Show the modal when the showForm state is true */
 .show-form {
   display: flex;
+}
+.login-prompt {
+  text-align: center;
+  padding: 20px;
+}
+
+.login-prompt h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.login-prompt p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.login-redirect-btn {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
+
+.login-redirect-btn:hover {
+  background-color: #3367d6;
+}
+
+.close-button {
+  background-color: #f1f1f1;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.close-button:hover {
+  background-color: #ddd;
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom"; // Import useParams to get courseId
+import { useNavigate, useParams } from "react-router-dom"; // Import useParams to get courseId
 import "../../css/Training/CourseDetails.css";
 import course from "../../images/course.png";
 import Footer from "../Footer";
@@ -44,17 +44,38 @@ const CourseDetails = () => {
   const course = courses.find((c) => c.id === parseInt(courseId)); // Find the course by ID
   const [showEnrollForm, setShowEnrollFrom]=useState(false);
   const[showEnquiryForm, setShowEnquiryForm]=useState(false);
+  const [showLoginPrompt, setShowLoginPrompt]=useState(false);
+  const [activeForm, setActiveForm]=useState(null);
+  const navigate=useNavigate();
 
   const isLoggedIn=localStorage.getItem('authToken') || localStorage.getItem('token');
 
-  const handleApplyClick=()=>{
+  const handleEnrollClick=()=>{
     if(!isLoggedIn){
-      alert('Please login first to apply');
+      setActiveForm('enroll');
+      setShowLoginPrompt(true);
       return;
     }
     setShowEnrollFrom(true);
+    
+  };
+  const handleEnquiryclick=()=>{
+    if(!isLoggedIn){
+      setActiveForm('enquiry');
+      setShowLoginPrompt(true);
+      return;
+    }
     setShowEnquiryForm(true);
-  }
+  };
+  const handleNavigateToLogin=()=>{
+    navigate('/Login',{state:{from:`/course/${courseId}`}});
+    setShowLoginPrompt(false);
+  };
+  const closeAllModals=()=>{
+    setShowEnquiryForm(false);
+    setShowEnrollFrom(false);
+    setShowLoginPrompt(false);
+  };
 
   if (!course) {
     return <div>Course not found!</div>; // Handle case where course is not found
@@ -78,8 +99,8 @@ const CourseDetails = () => {
               <p>Training Mode: Both Physical & Live Online Classes, including Online Live Night Classes</p>
               <p>UI/UX Design Training in Kathmandu, Nepal</p>
               <div className="trainings-buttons">
-                <button className="enroll-btn" onClick={handleApplyClick}>Enroll Now</button>
-                <button className="enquiry-btn" onClick={handleApplyClick}>Send Enquiry</button>
+                <button className="enroll-btn" onClick={handleEnrollClick}>Enroll Now</button>
+                <button className="enquiry-btn" onClick={handleEnquiryclick}>Send Enquiry</button>
               </div>
             </div>
 
@@ -134,6 +155,21 @@ const CourseDetails = () => {
               <div className="ad-box">Ad Display</div>
               <div className="ad-box">Ad Display</div>
             </div>
+          </div>
+        </div>
+      </div>
+      {/* login prompts */}
+      <div className={`modal-overlay ${showLoginPrompt ?'show-form':''}`}>
+        <div className="modal-content">
+          <div className="login-prompt">
+            <h2>Please Login First</h2>
+            <p>You need to be logged in to {activeForm==='enroll'?'enroll in this course':'send an enquiry'}</p>
+            <button className="login-redirect-btn" onClick={handleNavigateToLogin}>
+              Go to login Page
+            </button>
+            <button className="close-button" onClick={closeAllModals}>
+              Close
+            </button>
           </div>
         </div>
       </div>

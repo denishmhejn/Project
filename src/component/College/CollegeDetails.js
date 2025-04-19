@@ -10,7 +10,8 @@ const CollegeDetails = () => {
   const { id } = useParams(); // Get the college ID from the URL
   const [college, setCollege] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const navigate= useNavigate;
+  const [showLoginPrompt, setShowLoginPrompt]=useState(false);
+  const navigate= useNavigate();
 
   // check if user is logged in ore not
   const isLoggedIn=localStorage.getItem('authToken') || localStorage.getItem('token');
@@ -88,10 +89,18 @@ const CollegeDetails = () => {
 
   const handleApplyClick=()=>{
     if(!isLoggedIn){
-      alert('Please Login first to apply');
+      setShowLoginPrompt(true);
       return;
     }
     setShowForm(true);
+  };
+  const handleNavigateToLogin=()=>{
+    navigate('/Login',{state:{from:`/college/${id}`}});
+    setShowLoginPrompt(false);
+  };
+  const closeAllModals=()=>{
+    setShowForm(false);
+    setShowLoginPrompt(false);
   };
 
   if (!college) {
@@ -189,10 +198,24 @@ const CollegeDetails = () => {
         </form>
         <button
           className="close-button"
-          onClick={() => setShowForm(false)}
+          onClick={closeAllModals}
         >
           Close
         </button>
+      </div>
+    </div>
+    <div className={`modal-overlay ${showLoginPrompt ? 'show-form':''}`}>
+      <div className="modal-content">
+        <div className="login-prompts">
+          <h2>Please Login First</h2>
+          <p>You need to be logged in to access the application form</p>
+          <button className="login-redirect-btn" onClick={handleNavigateToLogin}>
+            Go to Login Page
+          </button>
+          <button className="close-button" onClick={closeAllModals}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
