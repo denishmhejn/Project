@@ -1,5 +1,5 @@
 
-import digitalLogic from '../../Data/DigitalLogic.pdf';
+
 import micro from '../../Data/microProcessor.pdf';
 import society from '../../Data/society.pdf'
 export const notesData = [
