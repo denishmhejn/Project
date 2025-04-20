@@ -7,7 +7,7 @@
    
   }
   
-  .banner {
+  .quiz-banner {
     
     display: inline-flex; /* Keep the banner wrapping tightly around its content */
     align-items: center;
@@ -63,9 +63,9 @@
     font-weight: bold;
     padding: 5px 5px; /* Smaller padding for a compact look */
     font-size: 16px; /* Smaller font size */
-    width: 800px; /* Adjusts to the text content's width */
+    width: 400px; /* Adjusts to the text content's width */
     /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); Subtle shadow */
-    height: 50px;
+    height: 80px;
     margin: auto; /* Center the banner within the parent div */
 }
 

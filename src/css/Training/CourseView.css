@@ -1,0 +1,136 @@
+/* TrainingCourses.css */
+
+/* General Styles */
+.training-courses {
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .training-courses h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .training-courses p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  /* Course Container */
+  .training-course-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  /* Course Card */
+  .training-course-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .training-course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Course Image */
+  .training-course-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  /* Course Header */
+  .training-course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .training-course-header h3 {
+    font-size: 18px;
+    color: #333;
+    display: inline-block;
+    margin: 0;
+  }
+  
+  .training-course-rating {
+    font-size: 16px;
+    display: inline-block;
+    /* float: right; */
+    color:#ffcc00; /* Yellow color for stars */
+  }
+  
+  /* Course Details */
+  .training-course-details {
+    margin: 10px 0;
+    color: #555;
+    display: flex;
+    font-size: 14px;
+    justify-content: space-around;
+    border-top: 1px dotted #ddd;
+    padding-top: 10px;
+  }
+  
+  .training-course-details p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+  
+  /* Join Button */
+  .training-join-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .training-join-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Mobile Responsive Styles */
+  @media (max-width: 768px) {
+    .training-courses h2 {
+      font-size: 1.5rem;
+    }
+  
+    .training-courses p {
+      font-size: 0.9rem;
+    }
+  
+    .training-course-card {
+      width: 100%;
+      max-width: 300px;
+    }
+  
+    .training-course-header h3 {
+      font-size: 1.2rem;
+    }
+  
+    .training-course-details p {
+      font-size: 0.8rem;
+    }
+  
+    .training-join-button {
+      font-size: 0.9rem;
+    }
+  }

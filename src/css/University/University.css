@@ -1,0 +1,170 @@
+.university-details {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* .header {
+  text-align: center;
+  margin-bottom: 20px;
+} */
+
+/* Image Section */
+.images {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between the two images */
+  margin-bottom: 20px;
+}
+
+.background-image {
+  width: 100%;
+  height: auto;
+}
+
+.front-image {
+  width: 40%; /* Full width for mobile */
+  height: auto;
+  margin-top: -50px; /* Move the image upward */
+}
+
+/* Description Section */
+.description {
+  margin-bottom: 20px;
+}
+
+.description p {
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: #333; /* Dark text color */
+}
+
+/* Executive Council Section */
+.executive-council {
+  margin-bottom: 20px;
+}
+
+.executive-council h2 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.executive-council ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.executive-council li {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* Councils Section */
+.councils {
+  margin-bottom: 20px;
+}
+
+.councils h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px; /* Increased spacing below the heading */
+}
+
+.councils ol {
+  padding-left: 20px;
+  color: #333;
+}
+
+.councils li {
+  font-size: 1.2rem; /* Adjusted font size for better readability on mobile */
+  color: #555;
+  margin-bottom: 10px; /* Increased spacing between list items */
+  line-height: 1.5; /* Added line height for better spacing within list items */
+}
+
+/* Faculties Section */
+.faculties {
+  margin-bottom: 20px;
+}
+
+.faculties h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.faculties ul {
+  list-style-type: disc; /* Use 'none' to avoid browser default styles */
+  padding-left: 20px; /* Added padding to align list items with text */
+
+}
+
+.faculties li {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 5px;
+  line-height: 1.5; /* Added line height for better spacing within list items */
+}
+
+/* Institutes Section */
+.institutes {
+  margin-bottom: 20px;
+}
+
+.institutes h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.institutes ul {
+  list-style-type: disc; /* Use 'none' to avoid browser default styles */
+  padding-left: 20px;
+}
+
+.institutes li {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 5px;
+  line-height: 1.5; /* Added line height for better spacing within list items */
+}
+.university-button{
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+}
+.university-button:hover{
+  background-color: blue;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .images {
+    gap: 10px; /* Reduce space between images on smaller screens */
+  }
+
+  .tu-front-image {
+    margin-top: -30px; /* Adjust margin for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .tu-front-image {
+    margin-top: -20px; /* Further adjust margin for very small screens */
+  }
+}

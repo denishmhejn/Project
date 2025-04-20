@@ -1,0 +1,44 @@
+/* AdDisplayRight.css */
+.ad-display-right-container {
+    width: 250px; /* Fixed width for the ad container */
+    /* margin-top: 10px; */
+  }
+  
+  .ad-display-right-track {
+    display: flex;
+    flex-direction: column; /* Stack ads vertically */
+    gap: 20px; /* Add gap between cards */
+    margin-bottom: 10px;
+  }
+  
+  .ad-display-right-card {
+    background-color: #f9f9f9; /* Light gray background */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px; /* Reduced padding for a smaller card */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%; /* Full width of the container */
+    height: 90px; /* Fixed height for the card */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+  }
+  
+  .ad-display-right-card h3 {
+    font-size: 16px; /* Reduced font size for a smaller card */
+    margin-bottom: 5px; /* Adjusted margin */
+    color: #333; /* Dark gray text color */
+  }
+  
+  .ad-display-right-card p {
+    font-size: 12px; /* Reduced font size for a smaller card */
+    color: #555; /* Medium gray text color */
+  }
+  
+  @media (max-width: 768px) {
+    .ad-display-right-container {
+      width: 100%; /* Full width for smaller screens */
+    }
+  }

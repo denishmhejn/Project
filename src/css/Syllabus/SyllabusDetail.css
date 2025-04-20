@@ -1,0 +1,146 @@
+/* SyllabusDetail.css */
+
+/* General Styles */
+.syllabus-detail-container {
+  display: flex;
+  gap: 20px; /* Space between main content and ad */
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.main-content {
+  flex: 1; /* Take up remaining space */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+}
+
+h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+/* Tables Container */
+.table-container,
+.credit-summary {
+  margin-bottom: 30px;
+  overflow-x: auto; /* Enable horizontal scrolling for small screens */
+}
+
+/* Courses Table */
+.courses-table,
+.credit-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.courses-table th,
+.courses-table td,
+.credit-table th,
+.credit-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.courses-table th,
+.credit-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  color: #333;
+}
+
+.courses-table tr:nth-child(even),
+.credit-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.courses-table tr:hover,
+.credit-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Credit Summary Table */
+.credit-table td:last-child,
+.credit-table th:last-child {
+  text-align: center;
+}
+
+.credit-table strong {
+  color: #007bff; /* Blue color for emphasis */
+}
+
+/* Semester Container */
+.semester-container {
+  margin-bottom: 30px;
+}
+
+.semester-container h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+/* Download Button */
+.download-button {
+  display: block;
+  margin: 30px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .syllabus-detail-container {
+    flex-direction: column; /* Stack main content and ad vertically on small screens */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .courses-table,
+  .credit-table {
+    display: block;
+    overflow-x: auto; /* Enable horizontal scrolling for small screens */
+  }
+
+  .courses-table th,
+  .courses-table td,
+  .credit-table th,
+  .credit-table td {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .download-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+  }
+}

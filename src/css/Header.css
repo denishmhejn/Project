@@ -1,17 +1,15 @@
 /* bebas neue font api */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 /* General Header Styling */
 .header {
   display: flex;
-  /* justify-content: space-between; */
-  margin-top: 26px;
   justify-content: space-around;
   align-items: center;
   padding: 10px 20px;
   background-color: #fff;
-  border-bottom: 1px #00000040;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
- 
 }
 
 .header-logo {
@@ -19,11 +17,9 @@
   font-family: 'Bebas Neue', sans-serif;
   font-style: normal;
   word-spacing: 2px;
-  
 }
 
 .header-logo .brand {
-  /* font-weight: bold; */
   font-size: 35px;
 }
 
@@ -35,25 +31,21 @@
 .header-search .search-container {
   display: flex;
   align-items: center;
-  border: 1px solid #9CD0E8;
+  border: 1px solid #9cd0e8;
   border-radius: 20px;
   background-color: white;
   padding: 5px 10px;
-  height: auto;
-  width: 380px; /* Adjust as needed */
-  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  height: 46px;
+  width: 480px; /* Adjust as needed */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   margin: auto;
-  
- 
 }
 
 .search-container .search-icon {
-  width: 20px; /* Adjust as needed */
+  width: 20px;
   height: 20px;
-  background-origin: padding-box;;
-  
+  background-origin: padding-box;
 }
-
 
 .search-container .search-input {
   border: none;
@@ -76,8 +68,8 @@
 
 .search-container .search-button:hover {
   background-color: #008ecc;
-  
 }
+
 .header-buttons {
   display: flex;
   gap: 15px;
@@ -110,4 +102,97 @@
 
 .btn-primary:hover {
   background-color: #008ecc;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .header {
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .header-search .search-container {
+    width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .header-logo {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .header-search .search-container {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .header-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .header-buttons .btn {
+    width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-logo {
+    font-size: 24px;
+    width: auto;
+  }
+
+  .header-search .search-container {
+    /* height: 40px; */
+    padding: 5px;
+  }
+
+  .search-container .search-input {
+    font-size: 0.8rem;
+    padding: 5px;
+  }
+
+  .search-container .search-button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .header-buttons .btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-logo {
+    font-size: 20px;
+    width: auto;
+  }
+
+  .header-search .search-container {
+    height: 36px;
+    padding: 3px;
+  }
+
+  .search-container .search-input {
+    font-size: 0.7rem;
+    padding: 3px;
+  }
+
+  .search-container .search-button {
+    padding: 3px 8px;
+    font-size: 0.7rem;
+  }
+
+  .header-buttons .btn {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
 }
