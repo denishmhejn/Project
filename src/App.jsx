@@ -34,6 +34,7 @@ import ForgotPassword from './component/Verification/ForgotPassword';
 import ResetPassword from './component/Verification/ResetPassaword';
 import ProtectedRoute from './component/Verification/ProtectedRoute';
 import OAuthCallback from './component/Verification/OAuthCallback';
+import NotesDetail from './component/Blogs/NotesDetail';
 
 const AppContent = () => {
   const location = useLocation();
@@ -96,6 +97,7 @@ const AppContent = () => {
       {/* For Blogs and course */}
       <Route path="/blogs" element={<Blogs/>} />
       <Route path="/notes" element={<Notes/>}/>
+      <Route path="/notes/:id" element={<NotesDetail/>}/>
 
 
       {/* for training courses */}

@@ -1,133 +1,130 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "../css/CollegeGrid.css";
 import acem from "../images/acem.png"; // Example image
 import instagramIcon from "../images/instagram.png"; // Example icon
 import linkedinIcon from "../images/linkedin.png"; // Example icon
+import { fetchColleges } from "./Services/apiService";
 
-const colleges = [
-  {
-    id: 1,
-    name: "Advance College of Engineering & Management",
-    location: "Kalanki, Kathmandu, Nepal",
-    description:
-      "ACEM is re-engineering its processes, delivery, & overall approach to lead in any unprecedented situation.",
-    image: acem,
-    website: "https://acem.edu.np",
-    socialLinks: [
-      { platform: "instagram", url: "https://instagram.com", icon: instagramIcon },
-      { platform: "linkedin", url: "https://linkedin.com", icon: linkedinIcon },
-    ],
-  },
-  {
-    id: 2,
-    name: "Stanford University",
-    location: "Stanford, California, USA",
-    description: "Stanford University is a leading research university known for its academic excellence and innovation.",
-    image: acem, // Replace with the actual image for Stanford
-    website: "https://www.stanford.edu",
-    socialLinks: [
-      { platform: "instagram", url: "https://facebook.com/stanford", icon: instagramIcon },
-      { platform: "linkedin", url: "https://twitter.com/stanford", icon: linkedinIcon },
-    ],
-  },
-  {
-    id: 3,
-    name: "Institute of Engineering, IOE",
-    location: "Pulchowk, Lalitpur, Nepal",
-    description: "The Institute of Engineering (IOE) is a constituent institute of Tribhuvan University renowned for its engineering and technology programs.",
-    image: acem,
-    website: "https://www.ioe.edu.np/",
-    socialLinks: [
-      { platform: "facebook", url: "https://www.facebook.com/ioe.pulchowk/", icon: instagramIcon },
-      { platform: "twitter", url: "https://twitter.com/ioepulchowk", icon: linkedinIcon },
-    ],
-  },
-  {
-    id: 4,
-    name: "Kathmandu University",
-    location: "Dhulikhel, Kavrepalanchwok, Nepal",
-    description: "Kathmandu University is a public university known for its focus on science, engineering, and medicine. It was established in 1991.",
-    image: acem, // Replace with appropriate image name
-    website: "https://www.ku.edu.np/",
-    socialLinks: [
-      { platform: "facebook", url: "https://www.facebook.com/groups/304572156768024/", icon: instagramIcon },
-      { platform: "twitter", url: "https://x.com/ku_dhulikhel?lang=en", icon: linkedinIcon },
-    ],
-  },
-];
 
-export default function CollegeGrid() {
-  const [showMore, setShowMore] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+const CollegeGrid=()=>{
+  const [colleges, setColleges]=useState([]);
+  const[loading, setLoading]=useState(true);
+  const [error, setError]=useState(null);
+  const [showMore, setShowMore]=useState(false);
+  const navigate=useNavigate();
 
-  const handleSeeMore = () => {
-    navigate("/College"); // Navigate to the College.js page
+  useEffect(()=>{
+    const loadColleges=async()=>{
+      try{
+        const response=await fetchColleges();
+        setColleges(response.data);
+        setLoading(false);
+      }catch(err){
+        setError(err.response?.data?.message || err.message);
+        setLoading(false);
+        console.error("error fetching colleges",err);
+      }
+    };
+    loadColleges();
+  },[]);
+
+  const handleSeeMore=()=>{
+    navigate('/College')
   };
-  const handleCardClick = (collegeId) => {
-    navigate(`/college/${collegeId}`); // Navigate to the CollegeDetails.js page with the college ID
+  
+  const handleCardClick=(collegeID)=>{
+    navigate(`/college/${collegeID}`);
   };
 
-  const visibleColleges = showMore ? colleges : colleges.slice(0, 3);
+  const visibleColleges= showMore? colleges: colleges.slice(0,3);
 
-  return (
+  if (loading) {
+    return (
+      <div className="collegebody">
+        <div className="loading-message">Loading colleges...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="collegebody">
+        <div className="error-container">
+          Error: {error}
+          <button onClick={() => window.location.reload()}>Retry</button>
+        </div>
+      </div>
+    );
+  }
+
+  return(
     <div className="collegebody">
       <div className="grid-container">
         <h1 className="title">Colleges In Nepal</h1>
         <p className="text">
-          See the colleges available in Nepal. Maybe some could grab your
-          interest.
+          See the Colleges available in Nepal. Maybe some could grab your interest.
         </p>
-
         <div className="card-container">
-          
-          {visibleColleges.map((college, index) => (
-            <div className="card" key={index} onClick={() => handleCardClick(college.id)}>
-              <img
-                src={college.image}
-                alt={college.name}
-                className="college-image"
-              />
+          {visibleColleges.map((college)=>(
+            <div className="card"
+              key={college.id}
+              onClick={()=>handleCardClick(college.id)}
+            >
+              <div className="image-container">
+                <img src={college.imageUrl || "/default-college.png"}
+                 alt={college.name}
+                 className="college-image"
+                 onError={(e)=>{
+                  e.target.src="/default-college.png";
+                 }} 
+                />
+              </div>
               <div className="college-info">
                 <h2 className="college-name">{college.name}</h2>
-                <p className="college-location">{college.location}</p>
-                <p className="college-description">{college.description}</p>
-                <a
-                  href={college.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="college-website"
-                >
-                  {college.website}
-                </a>
-                <div className="social-icons">
-                  {college.socialLinks.map((link, i) => (
-                    <a
-                      key={i}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="social-icon-link"
-                    >
-                      <img
-                        src={link.icon}
-                        alt={link.platform}
-                        className="social-icon"
-                      />
-                    </a>
-                  ))}
+                <p className="college-location">{college.location || college.address}</p>
+                <p className="college-description">
+                  {college.description || `${college.name} is a renowned institution in Nepal`}
+                </p>
+                <div className="college-meta">
+                  <a href={college.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="college-webaite"
+                  >
+                    Visit website
+                  </a>
+                  <div className="social-links">
+                    {college.socialLinks ?.map((link, index)=>(
+                      <a href={link.url}
+                        key={index}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
+                        <span className={`social-icon${link.platform}`}>
+                        {link.platform === 'instagram' && <i className="fab fa-instagram"></i>}
+                          {link.platform === 'facebook' && <i className="fab fa-facebook"></i>}
+                          {link.platform === 'linkedin' && <i className="fab fa-linkedin"></i>}
+                          {link.platform === 'twitter' && <i className="fab fa-twitter"></i>}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
+
             </div>
           ))}
         </div>
-
-        {!showMore && (
+        {!showMore && colleges.length>3 &&(
           <button className="see-more-button" onClick={handleSeeMore}>
             See More
           </button>
         )}
+
       </div>
     </div>
   );
-}
+};
+export default CollegeGrid;

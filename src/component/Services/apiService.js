@@ -51,3 +51,10 @@ export const initiateOAuth2Login = () => {
   const url = `${OAUTH2_AUTHORIZATION_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}`;
   window.location.href = url;
 };
+
+// Fetch Colleges
+export const fetchColleges = () => axios.get(`${API_URL}/colleges`);
+export const fetchCollegeById = (id) => axios.get(`${API_URL}/colleges/${id}`);
+
+//Notes
+export const fetchNotes = () => axios.get(`${API_URL}/notes`);

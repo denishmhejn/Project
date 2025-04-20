@@ -4,11 +4,14 @@ import "../../css/CollegeDetails.css";
 import Navbar from "../navBar";
 import AdLayout from "../AdLayout";
 import Footer from "../Footer";
-import acem1 from "../../images/acem1.jpg";
+
+import { fetchCollegeById } from "../Services/apiService";
 
 const CollegeDetails = () => {
   const { id } = useParams(); // Get the college ID from the URL
   const [college, setCollege] = useState(null);
+  const [loading, setLoading]=useState(true);
+  const [error, setError]=useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt]=useState(false);
   const navigate= useNavigate();
@@ -16,76 +19,20 @@ const CollegeDetails = () => {
   // check if user is logged in ore not
   const isLoggedIn=localStorage.getItem('authToken') || localStorage.getItem('token');
 
-  // Mock data (replace with API call or data fetching logic)
-  const colleges = [
-    {
-      id: 1,
-      name: "Advance College of Engineering & Management",
-      university: "Tribhuvan University",
-      address: "Kalanki, Kathmandu, Nepal",
-      image: acem1,
-      discipline: "Technology",
-      website: "https://acem.edu.np",
-      programs: [
-        { name: "Bachelor of Business Administration (BBA)", seats: 64 },
-        { name: "Bachelor of Information Management (BIM)", seats: 64 },
-        { name: "Bachelor of Computer Application (BCA)", seats: 35 },
-      ],
-      collegeInfo:
-        "Advance College of Engineering & Management (acem) is a private engineering college in Nepal established in 2000 AD by a group of experienced and dedicated academicians, computer engineers, and management professionals. It is affiliated with Tribhuvan University and offers Bachelor's and Master's degrees in various disciplines.",
-      features: [
-        "State-of-the-art infrastructure",
-        "Experienced faculty",
-        "Industry collaborations",
-      ],
-      studentLife:
-        "Thames provides a platform for students to come and start up programs that spark their interest. Whether it is managing a student club, bringing in co-curricular, extracurricular activities, recreational programs, or initiating a social project, the Office of Student Affairs ensures that students’ ideas are met with consideration.",
-      inductionSeminar:
-        "Students will have an opportunity to participate in an Induction Seminar which is designed to make your transition into college smooth and more enjoyable.",
-      firstYearSeminar: [
-        "Reading and Writing for College",
-        "Academic Writing",
-        "Critical Thinking",
-      ],
-    },
-    {
-      id: 2,
-      name: "Orchid International College",
-      university: "Purbanchal University",
-      address: "Kathmandu, Nepal",
-      image: acem1,
-      discipline: "Business Administration",
-      website: "https://www.collegesnepal.com/mba/",
-      programs: [
-        { name: "Master in Business Administration (MBA)", seats: 40 },
-        { name: "Bachelor of Business Administration (BBA)", seats: 60 },
-        { name: "Bachelor of Information Management (BIM)", seats: 48 },
-      ],
-      collegeInfo: "Orchid International College, established with a vision to provide quality education, is affiliated with Purbanchal University. The college offers a range of undergraduate and graduate programs, focusing on business administration and management. It is committed to fostering academic excellence and professional development among its students.",
-      features: [
-        "Modern facilities and resources",
-        "Qualified and experienced faculty",
-        "Industry-oriented curriculum",
-        "Strong alumni network",
-      ],
-      studentLife:
-        "Orchid International College encourages students to engage in various extracurricular activities, clubs, and social projects. The college provides a supportive environment for students to explore their interests and develop leadership skills through events, workshops, and seminars.",
-      inductionSeminar:
-        "New students are welcomed with an Induction Seminar designed to introduce them to the college's academic environment, facilities, and opportunities for personal and professional growth.",
-      firstYearSeminar: [
-        "Introduction to Business Management",
-        "Effective Communication Skills",
-        "Leadership and Team Building",
-      ],
-    },
-    // Add other colleges here
-  ];
-
-  useEffect(() => {
-    // Find the college by ID
-    const selectedCollege = colleges.find((college) => college.id === parseInt(id));
-    setCollege(selectedCollege);
-  }, [id]);
+  useEffect(()=>{
+    const loadCollegeDetails=async()=>{
+      try{
+        const response=await fetchCollegeById(id);
+        setCollege(response.data);
+        setLoading(false);
+      }catch (err){
+        setError(err.response?.data?.message || err.message);
+        setLoading(false);
+        
+      }
+    };
+    loadCollegeDetails();
+  },[id]);
 
   const handleApplyClick=()=>{
     if(!isLoggedIn){
@@ -94,135 +41,174 @@ const CollegeDetails = () => {
     }
     setShowForm(true);
   };
+
   const handleNavigateToLogin=()=>{
     navigate('/Login',{state:{from:`/college/${id}`}});
     setShowLoginPrompt(false);
   };
+
   const closeAllModals=()=>{
     setShowForm(false);
     setShowLoginPrompt(false);
   };
 
-  if (!college) {
-    return <div>Loading...</div>;
+  if(loading){
+    return(
+      <div className="loading-container">
+        <p>Loading College details...</p>
+      </div>
+    );
   }
-
-  return (
+  if(error){
+    return(
+      <div className="error-container">
+        <p>
+          Error:{error}
+        </p>
+        <button onClick={()=>window.location.reload()}>Retry</button>
+      </div>
+    );
+  }
+  if(!college){
+    return(
+      <div className="not-found-container">
+        <p>College not found</p>
+      </div>
+    );
+  }
+  return(
     <>
-      <Navbar />
-      <AdLayout />
+      <Navbar/>
+      <AdLayout/>
       <div className="college-details-container">
         <div className="college-header">
-          <img src={college.image} alt={college.name} className="college-image" />
+          <img src={college.imageUrl || "default-college.png"}
+           alt={college.name}
+            className="college-image" 
+            onError={(e)=>{e.target.src="/edfault-ceollege.png"; 
+            }}
+          />
           <h1>{college.name}</h1>
           <p>{college.university}</p>
-          <p>{college.address}</p>
-          <a href={college.website} target="_blank" rel="noopener noreferrer">
+          <p>{college.location || college.address}</p>
+          <a 
+            href={college.website} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="website-link"
+          >
             {college.website}
           </a>
         </div>
-
         <div className="college-content">
-          <h2>College Introduction</h2>
-          <p>{college.collegeInfo}</p>
-          <h2>Offered Programs</h2>
-          <ul>
-            {college.programs.map((program, index) => (
-              <li key={index}>
-                {program.name} - {program.seats} Seats
-              </li>
-            ))}
-          </ul>
-          <br />
-
-          <h2>Salient Features</h2>
-          <ul>
-            {college.features.map((feature, index) => (
-              <li key={index}>{feature}</li>
-            ))}
-          </ul>
-
-          <h2>Student Life</h2>
-          <p>{college.studentLife}</p>
-          <br />
-
-          <h2>Induction Seminar</h2>
-          <p>{college.inductionSeminar}</p>
-
-          <h2>First Year Seminar</h2>
-          <ul>
-            {college.firstYearSeminar.map((seminar, index) => (
-              <li key={index}>{seminar}</li>
-            ))}
-          </ul>
+          {college.description &&(
+            <>
+              <h2>About the College</h2>
+              <p>{college.description}</p>
+            </>
+          )}
+          {college.programs?.length>0&&(
+            <>
+              <h2>Offered programs</h2>
+              <ul className="programs-list">
+                {college.programs.map((program, index)=>(
+                  <li key={index}>
+                    <strong>{program.name}</strong>
+                    {program.seats && ` - ${program.seats} Seats`}
+                    {program.duration && ` (${program.duration})`}
+                    {program.description && <p>{program.description}</p>}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {college.features?.length>0 &&(
+            <>
+              <h2>Key features</h2>
+              <ul className="features-list">
+                {college.features.map((feature, index)=>(
+                  <li key={index}>{feature}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {college.facilities &&(
+            <>
+              <h2>Facilities</h2>
+              <p>{college.facilities}</p>
+            </>
+          )}
+          {college.admissionProcess &&(
+            <>
+            <h2>Admission process</h2>
+            <p>{college.admissionProcess}</p>
+            </>
+          )}
         </div>
-
-        <button
-      className="apply-button"
-      onClick={handleApplyClick}
-    >
-      Apply
-    </button>
-
-    <div className={`modal-overlay ${showForm ? 'show-form' : ''}`}>
-      <div className="modal-content">
-        <h2>Application Form</h2>
-        <form>
-          <label>
-            Full Name:
-            <input type="text" name="fullName" required />
-          </label>
-          <br />
-          <label>
-            Email:
-            <input type="email" name="email" required />
-          </label>
-          <br />
-          <label>
-            Contact:
-            <input type="number" name="contact" required />
-          </label>
-          <br />
-          <label>
-            Program:
-            <select name="program">
-              {college.programs.map((program, index) => (
-                <option key={index} value={program.name}>
-                  {program.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <br />
-          <button type="submit">Submit</button>
-        </form>
-        <button
-          className="close-button"
-          onClick={closeAllModals}
-        >
-          Close
+        <button className="apply-button" onClick={handleApplyClick}>
+          Apply Now
         </button>
-      </div>
-    </div>
-    <div className={`modal-overlay ${showLoginPrompt ? 'show-form':''}`}>
-      <div className="modal-content">
-        <div className="login-prompts">
-          <h2>Please Login First</h2>
-          <p>You need to be logged in to access the application form</p>
-          <button className="login-redirect-btn" onClick={handleNavigateToLogin}>
-            Go to Login Page
-          </button>
-          <button className="close-button" onClick={closeAllModals}>
-            Close
-          </button>
+
+        {/* Application Form  Modal */}
+        <div className={`modal-overlay ${showForm ? 'show-form' : ''}`}>
+          <div className="modal-content">
+            <h2>Application Form</h2>
+            <form>
+              <label>
+                Full Name:
+                <input type="text" name="fullName" required />
+              </label>
+              <label>
+                Email:
+                <input type="email" name="email" required />
+              </label>
+              <label>
+                Contact Number:
+                <input type="tel" name="contact" required />
+              </label>
+              {college.programs?.length > 0 && (
+                <label>
+                  Program:
+                  <select name="program" required>
+                    {college.programs.map((program, index) => (
+                      <option key={index} value={program.name}>
+                        {program.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              <div className="form-actions">
+                <button type="submit">Submit Application</button>
+                <button type="button" onClick={closeAllModals}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Login prompts */}
+        <div className={`modal-overlay ${showLoginPrompt ? 'show-form':''}`}>
+          <div className="modal-content">
+            <div className="login-prompt">
+              <h2>Login Required</h2>
+              <p>You newd to logged in to access the application form.</p>
+              <div className="prompt-actions">
+                <button className="primary-btn" onClick={handleNavigateToLogin}>
+                Go to Login
+                </button>
+                <button className="secondary-btn" onClick={closeAllModals}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <AdLayout />
-  <Footer />
+      <AdLayout/>
+      <Footer/>
     </>
   );
-};
 
+};
 export default CollegeDetails;
+  

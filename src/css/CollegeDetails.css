@@ -5,68 +5,167 @@
   margin: 0 auto;
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  color: #333;
 }
 
+/* Loading and Error States */
+.loading-container, 
+.error-container, 
+.not-found-container {
+  text-align: center;
+  padding: 3rem;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-container button, 
+.not-found-container button {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.error-container button:hover, 
+.not-found-container button:hover {
+  background: #3e8e41;
+}
+
+/* College Header */
 .college-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .college-header img {
   width: 100%;
+  max-width: 600px;
   height: auto;
+  max-height: 300px;
   border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
 .college-header h1 {
-  font-size: 2rem;
-  margin: 10px 0;
+  font-size: 2.2rem;
+  margin: 15px 0;
+  color: #2c3e50;
 }
 
 .college-header p {
   font-size: 1.2rem;
   color: #555;
+  margin: 5px 0;
 }
 
+.website-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.website-link:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+/* College Content */
 .college-content {
-  margin-top: 20px;
+  margin-top: 30px;
+  padding: 0 20px;
 }
 
 .college-content h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  font-size: 1.7rem;
+  margin: 30px 0 15px;
+  color: #2c3e50;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
 }
 
-.college-content ul {
+.college-content p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Lists */
+.programs-list, 
+.features-list {
+  margin-left: 25px;
+  margin-bottom: 25px;
+}
+
+.programs-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.programs-list li {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #3498db;
+}
+
+.programs-list strong {
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.features-list {
   list-style-type: disc;
-  margin-left: 20px;
 }
 
-.college-content li {
+.features-list li {
   margin-bottom: 10px;
+  font-size: 1.1rem;
 }
 
-/* Apply Button Styles */
+/* Apply Button */
 .apply-button {
   display: block;
   width: 100%;
-  max-width: 200px;
-  margin: 20px auto;
-  padding: 10px;
-  font-size: 1rem;
+  max-width: 250px;
+  margin: 40px auto;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: #fff;
-  background-color: #007bff;
+  background-color: #4CAF50;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   text-align: center;
+  transition: all 0.3s;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
 .apply-button:hover {
-  background-color: #0056b3;
+  background-color: #3e8e41;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
 }
 
-/* Modal Overlay Styles */
+/* Modal Styles */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -74,104 +173,187 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(3px);
 }
 
-/* Modal Content Styles */
+.show-form {
+  display: flex;
+}
+
 .modal-content {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 500px;
   position: relative;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-content h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .modal-content label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
 }
 
 .modal-content input[type="text"],
 .modal-content input[type="email"],
+.modal-content input[type="tel"],
+.modal-content input[type="number"],
 .modal-content select {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.modal-content button {
-  display: block;
-  width: 100%;
-  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   font-size: 1rem;
-  color: #fff;
-  /* background-color: #47bbdf; */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
+  transition: border 0.2s;
 }
 
-.modal-content button:hover {
-  background-color: #1e7e34;
+.modal-content input:focus,
+.modal-content select:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-/* Show the modal when the showForm state is true */
-.show-form {
+.form-actions {
   display: flex;
+  gap: 15px;
+  margin-top: 20px;
 }
+
+.form-actions button {
+  flex: 1;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.form-actions button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+
+.form-actions button[type="button"] {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.form-actions button[type="button"]:hover {
+  background-color: #ddd;
+}
+
+/* Login Prompt */
 .login-prompt {
   text-align: center;
   padding: 20px;
 }
 
 .login-prompt h2 {
-  color: #333;
+  color: #2c3e50;
   margin-bottom: 15px;
+  font-size: 1.8rem;
 }
 
 .login-prompt p {
-  color: #666;
-  margin-bottom: 20px;
+  color: #555;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
 }
 
-.login-redirect-btn {
-  background-color: #4285f4;
+.prompt-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.primary-btn {
+  background-color: #4CAF50;
   color: white;
+  padding: 12px 25px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 20px;
-  margin-right: 10px;
+  transition: background 0.2s;
 }
 
-.login-redirect-btn:hover {
-  background-color: #3367d6;
+.primary-btn:hover {
+  background-color: #3e8e41;
 }
 
-.close-button {
+.secondary-btn {
   background-color: #f1f1f1;
+  color: #333;
+  padding: 12px 25px;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background 0.2s;
 }
 
-.close-button:hover {
+.secondary-btn:hover {
   background-color: #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .college-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .college-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .prompt-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primary-btn, 
+  .secondary-btn {
+    width: 100%;
+    max-width: 250px;
+  }
 }
