@@ -24,7 +24,7 @@ export const notesData = [
             {
                 name:"Digital Logic",
                 notesDescription:" Digital logic",
-                notesFile:digitalLogic,
+                notesFile:""
             }
             // ... other courses
           ]

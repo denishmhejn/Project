@@ -1,88 +1,107 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/Training/CourseView.css";
-import child from "../../images/child.png"; // Replace with actual image URL
+import child from "../../images/child.png";
 import Navbar from '../navBar';
 import Footer from '../Footer';
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate } from "react-router-dom";
+import { fetchTrainings } from "../Services/apiService";
 
-const courses = [
-  {
-    id: 1, // Add a unique ID for each course
-    title: "Cyber Security",
-    duration: "5hr 30min",
-    videos: "10 Videos",
-    sales: "444 Sales",
-    image: child, // Replace with actual image URL
-    rating: 4.5,
-    downloads: "444 sales"
-  },
-  {
-    id: 2, // Add a unique ID for each course
-    title: "Cyber Law",
-    duration: "5hr 30min",
-    videos: "10 Videos",
-    sales: "444 Sales",
-    image: child, // Replace with actual image URL
-    rating: 4.5,
-    downloads: "444 sales"
-  },
-  {
-    id: 3, // Add a unique ID for each course
-    title: "Cloud Computing",
-    duration: "5hr 30min",
-    videos: "10 Videos",
-    sales: "444 Sales",
-    image: child, // Replace with actual image URL
-    rating: 4.5,
-    downloads: "444 sales"
-  }
-];
+export default function CourseView() {
+  const [courses, setCourses] = useState([]); // Fixed variable name (was 'course')
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-export default function Courseview() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  useEffect(() => {
+    const loadCourses = async () => { // Fixed typo in function name (was 'loadCouses')
+      try {
+        const response = await fetchTrainings();
+        setCourses(response.data);
+      } catch (err) {
+        setError(err.message || "Failed to fetch courses");
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCourses();
+  }, []);
 
-  // Function to handle course card click
   const handleCourseClick = (courseId) => {
-    navigate(`/course/${courseId}`); // Navigate to CourseDetails with courseId
+    navigate(`/course/${courseId}`);
   };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="training-courses">
+          <div className="loading-message">Loading courses...</div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="training-courses">
+          <div className="error-message">{error}</div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (courses.length === 0) {
+    return (
+      <>
+        <Navbar />
+        <div className="training-courses">
+          <div className="no-courses-message">No courses available at the moment.</div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
       <Navbar />
       <div className="training-courses">
         <div className="training-course-container">
-          {courses.map((course, index) => (
+          {courses.map((course) => (
             <div
-              key={index}
               className="training-course-card"
-              onClick={() => handleCourseClick(course.id)} // Add click handler
+              key={course.id}
+              onClick={() => handleCourseClick(course.id)} // Fixed: wrapped in arrow function
             >
-              {/* Course Image */}
-              <img
-                src={course.image}
-                alt={course.title}
-                className="training-course-image"
+              <img 
+                src={course.image || child} 
+                alt={course.title} 
+                className="training-course-image" // Fixed typo (was 'umage')
               />
-
-              {/* Course Content */}
               <div className="training-course-content">
-                {/* Title and Rating */}
                 <div className="training-course-header">
                   <h3>{course.title}</h3>
                   <div className="training-course-rating">
-                    {"⭐".repeat(Math.round(course.rating))}
+                    {"⭐".repeat(Math.round(course.rating || 4))}
                   </div>
                 </div>
 
-                {/* Course Details */}
                 <div className="training-course-details">
-                  <p>⏱ {course.duration}</p>
-                  <p>🎥 {course.videos}</p>
-                  <p>📊 {course.downloads}</p>
+                  <p>⏱ {course.duration || "N/A"}</p>
+                  <p>🎥 {course.videos || "N/A"}</p>
+                  <p>📊 {course.downloads || course.sales || "N/A"}</p>
                 </div>
 
-                {/* Join Button */}
-                <button className="training-join-button">Join Course</button>
+                <button 
+                  className="training-join-button" 
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Join Course
+                </button>
               </div>
             </div>
           ))}

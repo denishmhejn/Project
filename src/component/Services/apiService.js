@@ -52,9 +52,39 @@ export const initiateOAuth2Login = () => {
   window.location.href = url;
 };
 
+
+// search
+export const globalSearch = (query) => axios.get(`${API_URL}/api/search?query=${query}`);
+
 // Fetch Colleges
 export const fetchColleges = () => axios.get(`${API_URL}/colleges`);
 export const fetchCollegeById = (id) => axios.get(`${API_URL}/colleges/${id}`);
 
+// college apply 
+export const createAdmission = (admission) => axios.post(`${API_URL}/admissions/add`, admission);
+
 //Notes
 export const fetchNotes = () => axios.get(`${API_URL}/notes`);
+export const fetchNoteById = (id) => axios.get(`${API_URL}/notes/${id}`);
+
+
+//Trainomg course
+export const fetchTrainings = () => axios.get(`${API_URL}/api/trainings`);
+export const fetchTrainingById = (id) => axios.get(`${API_URL}/api/trainings/${id}`);
+
+
+//Enrollment Course
+export const createEnrollment = (enrollment) => axios.post(`${API_URL}/enrollments`, enrollment);
+
+
+// Syllabus
+export const fetchSyllabus = () => axios.get(`${API_URL}/api/syllabus`);
+export const searchSyllabus = (keyword) => axios.get(`${API_URL}/api/syllabus/search?keyword=${keyword}`);
+export const fetchSyllabusById = (id) => axios.get(`${API_URL}/api/syllabus/${id}`);
+
+
+//course
+export const fetchCourses = () => axios.get(`${API_URL}/courses`);
+export const fetchCourseById = (id) => axios.get(`${API_URL}/courses/${id}`);
+export const fetchCoursesByAffiliation = (affiliation) => axios.get(`${API_URL}/courses/by-affiliation?affiliation=${affiliation}`);
+export const searchCourses = (affiliation, keyword) => axios.get(`${API_URL}/courses/search?affiliation=${affiliation}&keyword=${keyword}`);
