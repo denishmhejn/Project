@@ -48,7 +48,7 @@ export default function Navbar() {
           <span>Resources</span>
           <div className="dropdown-content">
             <Link to="/notes">Notes</Link>
-            <Link to="/blogs">Blogs</Link>
+            {/* <Link to="/blogs">Blogs</Link> */}
           </div>
         </li>
         <li>

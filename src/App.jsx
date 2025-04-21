@@ -16,7 +16,7 @@ import CollegeDetails from './component/College/CollegeDetails';
 import Program from './component/Programs/Program';
 import ProgramCourseView from './component/Programs/ProgramCourseView';
 import TUProgramList from './component/Programs/TUProgramList';
-import TuSyllabusList from './component/Syllabus/TuSyllabusList';
+import TuSyllabusList from './component/Syllabus/SyllabusList';
 import SyllabusDetail from './component/Syllabus/SyllabusDetail';
 import CourseView from './component/Course/CourseView';
 import TuUniversityDetails from './component/University/TuUniversityDetails';
@@ -35,6 +35,7 @@ import ResetPassword from './component/Verification/ResetPassaword';
 import ProtectedRoute from './component/Verification/ProtectedRoute';
 import OAuthCallback from './component/Verification/OAuthCallback';
 import NotesDetail from './component/Blogs/NotesDetail';
+import SyllabusList from './component/Syllabus/SyllabusList';
 
 const AppContent = () => {
   const location = useLocation();
@@ -67,15 +68,16 @@ const AppContent = () => {
 
         {/* <Route path="College/:id" element={<CollegeViewById />} /> */}
         <Route path="College/:id" element={<CollegeDetails/>} />
-        <Route path='/programOptions' element={<Program/>} />  
-        <Route path="/program/:programId" element={<ProgramCourseView />} />
+        
 
         {/* For Syllabus */}
-       <Route path="/syllabus" element={<TuSyllabusList />} />
+       <Route path="/syllabus" element={<SyllabusList />} />
         <Route path="/syllabus/:id" element={<SyllabusDetail />} />
 
 
         {/* For Programs */}
+        <Route path='/programOptions' element={<Program/>} />  
+        <Route path="/program/:programId" element={<ProgramCourseView />} />
         <Route path="/tuProgramList" element={<TUProgramList />} />
         <Route path='/kuProgramList' element={<KUProgramList/>}/>
         <Route path='/puProgramList' element={<PUProgramList/>}/>

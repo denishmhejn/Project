@@ -1,84 +1,157 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // Import useParams to get courseId
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../css/Training/CourseDetails.css";
-import course from "../../images/course.png";
 import Footer from "../Footer";
 import Navbar from "../navBar";
-
-// Mock course data (replace with actual data fetching logic)
-const courses = [
-  {
-    id: 1,
-    title: "Cyber Security",
-    duration: "5hr 30min",
-    videos: "10 Videos",
-    sales: "444 Sales",
-    image: course, // Replace with actual image URL
-    rating: 4.5,
-    downloads: "444 sales"
-  },
-  {
-    id: 2,
-    title: "Cyber Law",
-    duration: "5hr 30min",
-    videos: "10 Videos",
-    sales: "444 Sales",
-    image: course, // Replace with actual image URL
-    rating: 4.5,
-    downloads: "444 sales"
-  },
-  {
-    id: 3,
-    title: "Cloud Computing",
-    duration: "5hr 30min",
-    videos: "10 Videos",
-    sales: "444 Sales",
-    image: course, // Replace with actual image URL
-    rating: 4.5,
-    downloads: "444 sales"
-  }
-];
+import { fetchTrainingById, createEnrollment } from "../Services/apiService";
 
 const CourseDetails = () => {
-  const { courseId } = useParams(); // Get courseId from the URL
-  const course = courses.find((c) => c.id === parseInt(courseId)); // Find the course by ID
-  const [showEnrollForm, setShowEnrollFrom]=useState(false);
-  const[showEnquiryForm, setShowEnquiryForm]=useState(false);
-  const [showLoginPrompt, setShowLoginPrompt]=useState(false);
-  const [activeForm, setActiveForm]=useState(null);
-  const navigate=useNavigate();
+  const { courseId } = useParams();
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showEnrollForm, setShowEnrollForm] = useState(false);
+  const [showEnquiryForm, setShowEnquiryForm] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [activeForm, setActiveForm] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    courseId: courseId
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const navigate = useNavigate();
 
-  const isLoggedIn=localStorage.getItem('authToken') || localStorage.getItem('token');
+  const isLoggedIn = localStorage.getItem('authToken') || localStorage.getItem('token');
 
-  const handleEnrollClick=()=>{
-    if(!isLoggedIn){
+  useEffect(() => {
+    const fetchCourseDetails = async () => {
+      try {
+        const response = await fetchTrainingById(courseId);
+        setCourse(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+        setLoading(false);
+        console.error("Error fetching course:", err);
+      }
+    };
+
+    fetchCourseDetails();
+  }, [courseId]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = "Name is required";
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Email is invalid";
+    }
+    if (!formData.phone.trim()) errors.phone = "Phone is required";
+    return errors;
+  };
+
+  const handleEnrollSubmit = async (e) => {
+    e.preventDefault();
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    try {
+      await createEnrollment(formData);
+      setSubmitStatus('success');
+      setTimeout(() => {
+        setShowEnrollForm(false);
+        setSubmitStatus(null);
+      }, 2000);
+    } catch (err) {
+      setSubmitStatus('error');
+      console.error("Enrollment error:", err);
+    }
+  };
+
+  const handleEnquirySubmit = (e) => {
+    e.preventDefault();
+    // Handle enquiry form submission
+    setSubmitStatus('success');
+    setTimeout(() => {
+      setShowEnquiryForm(false);
+      setSubmitStatus(null);
+    }, 2000);
+  };
+
+  const handleEnrollClick = () => {
+    if (!isLoggedIn) {
       setActiveForm('enroll');
       setShowLoginPrompt(true);
       return;
     }
-    setShowEnrollFrom(true);
-    
+    setShowEnrollForm(true);
+    setFormData({
+      ...formData,
+      courseId: courseId
+    });
   };
-  const handleEnquiryclick=()=>{
-    if(!isLoggedIn){
+
+  const handleEnquiryClick = () => {
+    if (!isLoggedIn) {
       setActiveForm('enquiry');
       setShowLoginPrompt(true);
       return;
     }
     setShowEnquiryForm(true);
   };
-  const handleNavigateToLogin=()=>{
-    navigate('/Login',{state:{from:`/course/${courseId}`}});
-    setShowLoginPrompt(false);
-  };
-  const closeAllModals=()=>{
-    setShowEnquiryForm(false);
-    setShowEnrollFrom(false);
+
+  const handleNavigateToLogin = () => {
+    navigate('/Login', { state: { from: `/course/${courseId}` } });
     setShowLoginPrompt(false);
   };
 
+  const closeAllModals = () => {
+    setShowEnquiryForm(false);
+    setShowEnrollForm(false);
+    setShowLoginPrompt(false);
+    setFormErrors({});
+    setSubmitStatus(null);
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <p>Loading course details...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <p>Error: {error}</p>
+        <button onClick={() => window.location.reload()}>Try Again</button>
+      </div>
+    );
+  }
+
   if (!course) {
-    return <div>Course not found!</div>; // Handle case where course is not found
+    return (
+      <div className="not-found-container">
+        <p>Course not found</p>
+      </div>
+    );
   }
 
   return (
@@ -92,21 +165,27 @@ const CourseDetails = () => {
             <div className="trainings-text">
               <h2>{course.title}</h2>
               <div className="trainings-info">
-                <span>📅 {course.duration}</span>
-                <span>🎨 UI/UX DESIGNER</span>
+                <span>📅 {course.duration || 'N/A'}</span>
+                <span>🎨 {course.category || 'General'}</span>
                 <span>🔗 Share with your Friends</span>
               </div>
-              <p>Training Mode: Both Physical & Live Online Classes, including Online Live Night Classes</p>
-              <p>UI/UX Design Training in Kathmandu, Nepal</p>
+              <p>{course.description || 'Training Mode: Both Physical & Live Online Classes, including Online Live Night Classes'}</p>
+              <p>{course.location || 'Online Course'}</p>
               <div className="trainings-buttons">
                 <button className="enroll-btn" onClick={handleEnrollClick}>Enroll Now</button>
-                <button className="enquiry-btn" onClick={handleEnquiryclick}>Send Enquiry</button>
+                <button className="enquiry-btn" onClick={handleEnquiryClick}>Send Enquiry</button>
               </div>
             </div>
 
             {/* Right Section - Image */}
             <div className="trainings-image">
-              <img src={course.image} alt={course.title} />
+              <img 
+                src={course.imageUrl || '/default-course.png'} 
+                alt={course.title} 
+                onError={(e) => {
+                  e.target.src = '/default-course.png';
+                }}
+              />
             </div>
           </div>
         </div>
@@ -129,23 +208,24 @@ const CourseDetails = () => {
               <h2 id="overview">Course Overview</h2>
               <h3>{course.title}</h3>
               <p>
-                Entrance Gateway offers a world-class UI/UX design training in Nepal to help aspiring designers develop essential design skills.
-                The course aims to enhance design skills by implementing a CX-centric approach.
+                {course.overview || 'This course offers comprehensive training to help you develop essential skills.'}
               </p>
 
               <h2 id="benefits">Benefits</h2>
               <h3>Benefits of {course.title}</h3>
-              <p>
-                UI/UX is a critical phase in software and web application development. The course offers the following key benefits:
-              </p>
               <ul>
-                <li>Understand the fundamental principles of UI/UX design.</li>
-                <li>Learn design thinking processes and key UI/UX tools.</li>
-                <li>Develop wireframes and prototypes before product development.</li>
-                <li>Differentiate between UI/UX and CX (Customer Experience).</li>
-                <li>Master impactful visual design for communication.</li>
-                <li>Stay updated with the latest UI/UX design trends.</li>
-                <li>Career opportunities in UI/UX design, branding, and creative fields.</li>
+                {course.benefits?.length > 0 ? (
+                  course.benefits.map((benefit, index) => (
+                    <li key={index}>{benefit}</li>
+                  ))
+                ) : (
+                  <>
+                    <li>Understand fundamental principles</li>
+                    <li>Learn key tools and techniques</li>
+                    <li>Develop practical skills</li>
+                    <li>Career opportunities in the field</li>
+                  </>
+                )}
               </ul>
             </div>
 
@@ -158,78 +238,149 @@ const CourseDetails = () => {
           </div>
         </div>
       </div>
-      {/* login prompts */}
-      <div className={`modal-overlay ${showLoginPrompt ?'show-form':''}`}>
+
+      {/* Login Prompt Modal */}
+      <div className={`modal-overlay ${showLoginPrompt ? 'show-form' : ''}`}>
         <div className="modal-content">
           <div className="login-prompt">
             <h2>Please Login First</h2>
-            <p>You need to be logged in to {activeForm==='enroll'?'enroll in this course':'send an enquiry'}</p>
-            <button className="login-redirect-btn" onClick={handleNavigateToLogin}>
-              Go to login Page
-            </button>
-            <button className="close-button" onClick={closeAllModals}>
-              Close
-            </button>
+            <p>You need to be logged in to {activeForm === 'enroll' ? 'enroll in this course' : 'send an enquiry'}</p>
+            <div className="button-group">
+              <button className="login-redirect-btn" onClick={handleNavigateToLogin}>
+                Go to Login Page
+              </button>
+              <button className="close-button" onClick={closeAllModals}>
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      {/* Enroll form */}
-      <div className={`modal-overlay ${
-        showEnrollForm ? "show-form":""
-          }`}>
-            <div className="modal-content">
-            <form >
-              <h2>Enroll Form</h2>
-                <label htmlFor="">
-                  Full Name:
-                  <input type="text" name="name" required />
-                </label>
-                <br />
-                <label htmlFor="">
-                  Phone Number:
-                  <input type="number" name="phone" required id="" />
-                </label>
-                <br />
-                <label htmlFor="">
-                  Email:
-                  <input type="email" name="email" required />
-                </label>
-                <button type="submit">Submit</button>
 
-            </form>
-            <button className="close-button" onClick={()=>setShowEnrollFrom(false)}>
-              Close
-            </button>
-            </div>  
-      </div>
-      {/* Enquiry Form */}
-      <div className={`modal-overlay ${
-        showEnquiryForm?"show-form":""
-      }`}>
+      {/* Enroll Form Modal */}
+      <div className={`modal-overlay ${showEnrollForm ? "show-form" : ""}`}>
         <div className="modal-content">
-          <h2>Send Enquiry</h2>
-          <form >
-            <label htmlFor="">
-              Full Name:
-              <input type="text" name="name" required />
-            </label>
-            <br />
-            <label htmlFor="">
-              Email:
-              <input type="email" name="email"required />
-            </label>
-            <br />
-            <label htmlFor="">
-              Message:
-              <textarea name="message" required></textarea>
-            </label>
-            <button type="submit"> Submit </button>
-          </form>
-          <button className="close-button" onClick={()=>setShowEnquiryForm(false)}>
-            Close
-          </button>
+          <h2>Enroll in {course.title}</h2>
+          {submitStatus === 'success' ? (
+            <div className="success-message">
+              <p>Enrollment successful! We'll contact you shortly.</p>
+            </div>
+          ) : submitStatus === 'error' ? (
+            <div className="error-message">
+              <p>Error submitting enrollment. Please try again.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleEnrollSubmit}>
+              <div className="form-group">
+                <label>
+                  Full Name:
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  {formErrors.name && <span className="error">{formErrors.name}</span>}
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Email:
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  {formErrors.email && <span className="error">{formErrors.email}</span>}
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Phone Number:
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  {formErrors.phone && <span className="error">{formErrors.phone}</span>}
+                </label>
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="submit-btn">
+                  Submit Enrollment
+                </button>
+                <button type="button" className="cancel-btn" onClick={closeAllModals}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
+
+      {/* Enquiry Form Modal */}
+      <div className={`modal-overlay ${showEnquiryForm ? "show-form" : ""}`}>
+        <div className="modal-content">
+          <h2>Send Enquiry About {course.title}</h2>
+          {submitStatus === 'success' ? (
+            <div className="success-message">
+              <p>Enquiry sent successfully! We'll contact you shortly.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleEnquirySubmit}>
+              <div className="form-group">
+                <label>
+                  Full Name:
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Email:
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Message:
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </label>
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="submit-btn">
+                  Send Enquiry
+                </button>
+                <button type="button" className="cancel-btn" onClick={closeAllModals}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+
       <Footer />
     </>
   );
